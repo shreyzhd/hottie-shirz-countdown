@@ -26,94 +26,73 @@
 
     #countdown {
       font-size: 2.5rem;
-      color: #fffacd; /* light yellow */
-      animation: pulse 1.5s infinite;
+      color: #fffacd;
+      animation: pulse 1s infinite;
       font-family: "Courier New", monospace;
     }
 
     @keyframes pulse {
-      0% { text-shadow: 0 0 5px #fffacd; }
-      50% { text-shadow: 0 0 20px #fffacd; }
-      100% { text-shadow: 0 0 5px #fffacd; }
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 0.8; }
+      100% { transform: scale(1); opacity: 1; }
     }
 
-    .message {
-      display: none;
-      font-size: 1.5rem;
-      color: #ff69b4;
-      margin-top: 20px;
-    }
-
-    .sparkle {
-      position: absolute;
-      width: 6px;
-      height: 6px;
-      background: yellow;
-      border-radius: 50%;
-      animation: sparkle 1s linear infinite;
-      pointer-events: none;
+    .sparkles::after {
+      content: ' ✨✨✨';
+      animation: sparkle 1.5s infinite;
     }
 
     @keyframes sparkle {
-      0% {
-        transform: scale(1);
-        opacity: 1;
-      }
-      100% {
-        transform: scale(2);
-        opacity: 0;
-      }
+      0% { opacity: 0.3; }
+      50% { opacity: 1; }
+      100% { opacity: 0.3; }
+    }
+
+    #birthday-message {
+      display: none;
+      color: pink;
+      font-size: 1.5rem;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
-  <h1>Countdown to the Hottie’s Birthday</h1>
-  <div id="countdown"></div>
-  <div class="message" id="birthdayMessage">
-    🎉 Happy birthday hottieee! 🥳<br />
-    Officially UNC status now 😌<br />
-    Congratsss 🎂💖
+
+  <h1 class="sparkles">🎉 Countdown to Hottie Shirz Birthday 🎂</h1>
+  <div id="countdown">Loading...</div>
+  <div id="birthday-message">
+    <img src="birthday.gif" alt="Birthday GIF" style="max-width: 250px; border-radius: 12px; margin-bottom: 1rem;" />
+    🎉 Happy Birthday Hottieee 🎉<br />
+    Officially UNC status now 💅<br />
+    Congratsss 💖✨
   </div>
-  <img src="birthday.gif" alt="Birthday Surprise" id="birthdayGif" style="display:none; width: 300px;" />
 
   <script>
-    const countdown = document.getElementById("countdown");
-    const message = document.getElementById("birthdayMessage");
-    const gif = document.getElementById("birthdayGif");
+    const birthday = new Date("2025-07-23T00:00:00");
+    const countdownEl = document.getElementById("countdown");
+    const messageEl = document.getElementById("birthday-message");
 
-    const targetDate = new Date("July 25, 2025 00:00:00").getTime();
+    function updateCountdown() {
+      const now = new Date();
+      let diff = birthday - now;
 
-    const updateCountdown = () => {
-      const now = new Date().getTime();
-      const distance = targetDate - now;
-
-      if (distance <= 0) {
-        countdown.style.display = "none";
-        message.style.display = "block";
-        gif.style.display = "block";
+      if (diff <= 0) {
+        countdownEl.style.display = "none";
+        messageEl.style.display = "block";
         return;
       }
 
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
 
-      countdown.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-    };
+      countdownEl.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
 
-    setInterval(updateCountdown, 1000);
     updateCountdown();
-
-    // Sparkle effect
-    setInterval(() => {
-      const sparkle = document.createElement("div");
-      sparkle.className = "sparkle";
-      sparkle.style.top = `${Math.random() * window.innerHeight}px`;
-      sparkle.style.left = `${Math.random() * window.innerWidth}px`;
-      document.body.appendChild(sparkle);
-      setTimeout(() => sparkle.remove(), 1000);
-    }, 200);
+    setInterval(updateCountdown, 1000);
   </script>
+
 </body>
 </html>
