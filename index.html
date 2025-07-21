@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hottie Shirz Birthday</title>
+  <title>Hottie Shirz Countdown</title>
   <style>
     body {
       font-family: "Comic Sans MS", cursive, sans-serif;
@@ -17,6 +17,7 @@
       margin: 0;
       overflow: hidden;
       text-align: center;
+      padding: 1rem;
     }
 
     h1 {
@@ -24,11 +25,12 @@
       margin-bottom: 20px;
     }
 
-    #countdown {
+    #timer {
       font-size: 2.5rem;
       color: #fffacd;
       animation: pulse 1s infinite;
       font-family: "Courier New", monospace;
+      word-wrap: break-word;
     }
 
     @keyframes pulse {
@@ -51,34 +53,51 @@
     #birthday-message {
       display: none;
       color: pink;
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       margin-top: 20px;
+    }
+
+    #birthday-message img {
+      max-width: 90%;
+      height: auto;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+      #timer {
+        font-size: 2rem;
+      }
+      #birthday-message {
+        font-size: 1.1rem;
+      }
     }
   </style>
 </head>
 <body>
 
   <h1 class="sparkles">🎉 Countdown to Hottie Shirz Birthday 🎂</h1>
-  <div id="countdown">Loading...</div>
+  <div id="timer">Loading...</div>
+
   <div id="birthday-message">
-    <img src="birthday.gif" alt="Birthday GIF" style="max-width: 250px; border-radius: 12px; margin-bottom: 1rem;" />
+    <img src="birthday.gif" alt="Birthday GIF" />
     🎉 Happy Birthday Hottieee 🎉<br />
     Officially UNC status now 💅<br />
     Congratsss 💖✨
   </div>
 
   <script>
-    const birthday = new Date("2025-07-23T00:00:00");
-    const countdownEl = document.getElementById("countdown");
-    const messageEl = document.getElementById("birthday-message");
-
-    function updateCountdown() {
+    function updateTimer() {
+      const future = Date.parse("2025-07-23T00:00:00");
       const now = new Date();
-      let diff = birthday - now;
+      const diff = future - now;
 
       if (diff <= 0) {
-        countdownEl.style.display = "none";
-        messageEl.style.display = "block";
+        document.getElementById("timer").style.display = "none";
+        document.getElementById("birthday-message").style.display = "block";
         return;
       }
 
@@ -87,11 +106,14 @@
       const minutes = Math.floor((diff / (1000 * 60)) % 60);
       const seconds = Math.floor((diff / 1000) % 60);
 
-      countdownEl.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+      document.getElementById("timer").innerHTML =
+        days + "d " +
+        hours.toString().padStart(2, "0") + "h " +
+        minutes.toString().padStart(2, "0") + "m " +
+        seconds.toString().padStart(2, "0") + "s ";
     }
 
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
+    setInterval(updateTimer, 1000);
   </script>
 
 </body>
